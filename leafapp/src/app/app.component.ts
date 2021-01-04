@@ -104,8 +104,39 @@ export class AppComponent implements AfterViewInit {
         fillOpacity: 0.8,
       };
 
-      this.layer  = L.markerClusterGroup();
-      const geoJsonLayer = L.geoJSON(data);
+      this.layer  = L.markerClusterGroup({
+        iconCreateFunction: (cluster) => {
+
+          const childMarkers = cluster.getAllChildMarkers();
+          let childCount = 0;
+          for (const childMarker of childMarkers) {
+            childCount += childMarker.count; // or whatever computation you need
+          }
+
+          var c = ' marker-cluster-';
+          if (childCount < 10) {
+            c += 'small';
+          } else if (childCount < 100) {
+            c += 'medium';
+          } else {
+            c += 'large';
+          }
+      
+          return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', className: 'marker-cluster' + c, iconSize: new L.Point(40, 40) });
+
+
+          // return L.divIcon({ html: '<b>' + myCustomCount + '</b>' });
+        }
+      });
+      const geoJsonLayer = L.geoJSON(data, {
+        pointToLayer: (geoJsonPoint, latlng) => {
+          geoJsonPoint.properties = geoJsonPoint.geometry.properties;
+          delete geoJsonPoint.geometry.properties;
+          const marker =  L.marker(latlng);
+          marker.count = geoJsonPoint.properties.count;
+          return marker;
+        }
+      });
       this.layer.addLayer(geoJsonLayer);
 
       

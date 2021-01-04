@@ -168,7 +168,7 @@ class Omnisci:
                     """
 
 
-        df = self.con.select_ipc(query)
+        df = self.con.select_ipc_gpu(query)
         # cursor = self.con.execute(query)
         # only_points = df.drop(['tree_dbh', 'user_type'])
 
@@ -256,8 +256,8 @@ class Omnisci:
 
     def createCluster(self, where , geohash_level, scale):
         # return self.createClusterHDBScan(where, geohash_level, scale)
-        # return self.createClusterKMEans(where, geohash_level)
-        return self.clusterGeohash(where)
+        return self.createClusterKMEans(where, geohash_level)
+        # return self.clusterGeohash(where)
 
     def createNoCluster(self, where):
         query = f"""select
@@ -285,11 +285,11 @@ class Omnisci:
                     where {where}
                     group by geohash_{geohash_level}
                     """
-        df = self.con.select_ipc(query)
+        df = self.con.select_ipc_gpu(query)
         
 
         items = df.values.tolist()
-        print(items)
+        # print(items)
         return items
 
     def request(self, zoom, extent, scale):

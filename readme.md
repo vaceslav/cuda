@@ -1,3 +1,89 @@
+
+# Install
+
+## docker
+
+- install docker
+- install docker-compose
+- instal NVIDIA driver and runtime  https://www.celantur.com/blog/run-cuda-in-docker-on-linux/
+- define nvidia runtime /etc/docker/daemon.json 
+
+        {
+            "default-runtime": "nvidia",
+            "runtimes": {
+                "nvidia": {
+                    "path": "/usr/bin/nvidia-container-runtime",
+                    "runtimeArgs": []
+                }
+            }
+        }
+
+restart docker
+
+    sudo systemctl stop docker
+    sudo systemctl start docker
+
+## python 
+
+- install miniconda https://docs.conda.io/en/latest/miniconda.html#linux-installers
+
+create new eviropment 
+
+    conda create --name slava
+    conda activate slava
+    conda install -c rapidsai -c nvidia -c conda-forge -c defaults cudf=0.14 cuml=0.14 python=3.7 cudatoolkit=11.0 pymapd pygeohash
+    #better cuda 11 and latest rapids
+    conda install -c rapidsai -c nvidia -c conda-forge  -c defaults rapids=0.17 python=3.8 cudatoolkit=11.0 pymapd pygeohash
+    conda install -c conda-forge hdbscan
+    conda install -c conda-forge geojson
+
+
+
+
+
+
+
+## login in omnisci db cli
+
+    docker-compose exec db bash
+    ./insert_sample_data
+    /omnisci/bin/omnisql 
+
+create table *portfolios*
+
+    CREATE TABLE IF NOT EXISTS portfolios (
+            id BIGINT NOT NULL, 
+            lat FLOAT, lon FLOAT,
+            geohash_1 TEXT ENCODING DICT,
+            geohash_2 TEXT ENCODING DICT,
+            geohash_3 TEXT ENCODING DICT,
+            geohash_4 TEXT ENCODING DICT,
+            geohash_5 TEXT ENCODING DICT,
+            geohash_6 TEXT ENCODING DICT,
+            geohash_7 TEXT ENCODING DICT,
+            geohash_8 TEXT ENCODING DICT,
+            tsi FLOAT,
+            building TEXT ENCODING DICT
+            );
+
+#password: **HyperInteractive**
+
+
+## FAQ
+
+"NO NVIDIA GPU detected"
+
+    rm -rf  ~/.nv/
+    reboot
+
+
+## sample apps
+
+download city data from http://www.geonames.org
+
+     wget https://download.geonames.org/export/dump/allCountries.zip -P data
+
+
 https://gist.github.com/nathzi1505/d2aab27ff93a3a9d82dada1336c45041
 
 
