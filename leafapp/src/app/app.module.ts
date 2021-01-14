@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,6 +18,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatSelectModule,
     MatButtonModule,
     MatExpansionModule,
+    MatCheckboxModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

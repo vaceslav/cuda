@@ -15,7 +15,46 @@ export class PortfolioService {
     .asObservable()
     .pipe(map((data) => data.analyze));
 
-  private _filter = {};
+  public countires$ = this.analyses$.pipe(
+    map((data) => data.countries),
+    map((countries) => {
+      const result = [];
+      for (const item in countries) {
+        result.push({
+          country: item,
+          count: countries[item],
+          checked: this._filter.countries.indexOf(item) !== -1,
+        });
+      }
+
+      result.sort((a, b) => b.count - a.count);
+
+      return result;
+    })
+  );
+
+  buildings$ = this.analyses$.pipe(
+    map((data) => data.building),
+    map((building) => {
+      const result = [];
+      for (const item in building) {
+        result.push({
+          name: item,
+          count: building[item],
+          checked: this._filter.buildings.indexOf(item) !== -1,
+        });
+      }
+
+      result.sort((a, b) => b.count - a.count);
+
+      return result;
+    })
+  );
+
+  private _filter = {
+    countries: [],
+    buildings: [],
+  };
 
   constructor(private http: HttpClient) {}
 
@@ -28,6 +67,28 @@ export class PortfolioService {
       delete this._filter[argName];
     } else {
       this._filter[argName] = value;
+    }
+
+    this.refresh();
+  }
+
+  setFilterCountry(country: string, checked: boolean) {
+    if (!checked) {
+      const index = this._filter.countries.indexOf(country);
+      this._filter.countries.splice(index, 1);
+    } else {
+      this._filter.countries.push(country);
+    }
+
+    this.refresh();
+  }
+
+  setFilterBuilding(name: any, checked: boolean) {
+    if (!checked) {
+      const index = this._filter.buildings.indexOf(name);
+      this._filter.buildings.splice(index, 1);
+    } else {
+      this._filter.buildings.push(name);
     }
 
     this.refresh();

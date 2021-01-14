@@ -13,4 +13,20 @@ def create_filter_where(filter):
     if 'tornado' in filter:
         filter_where = filter_where + f" AND tornado = {filter['tornado']}"
 
+    if 'countries' in filter:
+        countries = filter["countries"]
+
+        if len(countries) > 0:
+            country_join = "' , '".join(countries)
+            filter_where = filter_where + \
+                f" AND CountryCode IN ('{country_join}')"
+
+    if 'buildings' in filter:
+        buildings = filter["buildings"]
+
+        if len(buildings) > 0:
+            buildings_join = "' , '".join(buildings)
+            filter_where = filter_where + \
+                f" AND Building_Type IN ('{buildings_join}')"
+
     return filter_where

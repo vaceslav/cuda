@@ -47,3 +47,35 @@
 
   </mat-expansion-panel>
 </div>
+<div class="country-container">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Countries</mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="country-sub-container">
+      <mat-checkbox 
+              *ngFor="let c of countires$ | async" 
+              (change)="countryClick($event, c)"
+              [checked]="c.checked"
+              >{{c.country}} - {{c.count}}
+      </mat-checkbox>
+    </div>
+
+  </mat-expansion-panel>
+</div>
+
+<div class="building-container">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Buildings</mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="building-sub-container">
+      <mat-checkbox *ngFor="let c of buildings$ | async"
+              (change)="buildingClick($event, c)"
+              [checked]="c.checked">{{c.name}} - {{c.count}}</mat-checkbox>
+    </div>
+    
+  </mat-expansion-panel>
+</div>

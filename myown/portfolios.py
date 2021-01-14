@@ -36,7 +36,8 @@ class Portfolios:
                         hail,
                         heat_wave,
                         tornado,
-                        Building_Type
+                        Building_Type,
+                        CountryCode
                     FROM portfolios where PortfolioName = '{portfolio_name}'"""
 
         # if len(filter) > 0:
@@ -57,6 +58,7 @@ class Portfolios:
         hail_count = gdf.groupby('hail')["Sum_Insured"].count()
         heat_wave_count = gdf.groupby('heat_wave')["Sum_Insured"].count()
         tornado_count = gdf.groupby('tornado')["Sum_Insured"].count()
+        country_count = gdf.groupby('CountryCode')["Sum_Insured"].count()
 
         end = time.time()
         duration = end - start
@@ -68,6 +70,7 @@ class Portfolios:
             'tsiSum': tsiSum,
             'lossesSum': lossesSum,
             'building': self.convert(building_count),
+            'countries': self.convert(country_count),
             'earthquake': self.convert(earthquake_count),
             'hail':  self.convert(hail_count),
             'heat_wave': self.convert(heat_wave_count),

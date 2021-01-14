@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { PortfolioService } from './portfolio.service';
 import { map } from 'rxjs/operators';
 import { Chart } from 'chart.js';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-root',
@@ -40,6 +41,8 @@ export class AppComponent implements AfterViewInit, OnInit {
   hailChart: Chart;
   tornadoChart: Chart;
   heatChart: Chart;
+  countires$: Observable<any>;
+  buildings$: Observable<any[]>;
 
   constructor(
     private http: HttpClient,
@@ -50,6 +53,10 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.portfolios$ = this.portfolioService
       .list()
       .pipe(map((d) => d.portfolios));
+
+    this.countires$ = this.portfolioService.countires$;
+
+    this.buildings$ = this.portfolioService.buildings$;
 
     this.portfolioService.analyses$
       .pipe(map((data) => data.earthquake))
@@ -390,5 +397,13 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   earthQuakeChange($event) {
     this.portfolioService.setFilter('earthquake', $event);
+  }
+
+  countryClick($event: MatCheckboxChange, c) {
+    this.portfolioService.setFilterCountry(c.country, $event.checked);
+  }
+
+  buildingClick($event: MatCheckboxChange, c) {
+    this.portfolioService.setFilterBuilding(c.name, $event.checked);
   }
 }

@@ -24,3 +24,28 @@
   right: 5px;
   top: 185px;
 }
+
+.country-container,
+.building-container {
+  position: absolute;
+  width: 350px;
+  z-index: 100000;
+  right: 410px;
+  top: 185px;
+
+  .country-sub-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    max-height: 700px;
+    overflow: auto;
+  }
+}
+
+.building-container {
+  right: 765px;
+
+  .building-sub-container {
+    display: grid;
+    grid-template-columns: auto;
+  }
+}
