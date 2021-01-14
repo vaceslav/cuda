@@ -1,8 +1,49 @@
 <button (click)="onClusterClick()">Cluster</button>
 <button (click)="getScale()">Scale</button>
+<button (click)="addImageLayer()">Image</button>
+
+<div>Position: Long {{long}} Lat {{lat}}</div>
+
+<h4>Cluster Count: {{clusterCount | number }} Cluster TSI: {{clusterTsi | number }}</h4>
+
+
+<mat-form-field appearance="fill" style="width: 350px;">
+  <mat-label>Portfolio</mat-label>
+  <mat-select [(value)]="selectedPortfolio">
+    <mat-option *ngFor="let portfolio of portfolios$ | async" [value]="portfolio">
+      {{portfolio}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field appearance="fill" style="width: 350px;">
+  <mat-label>Earthquake</mat-label>
+  <mat-select (valueChange)="earthQuakeChange($event)">
+    <mat-option [value]="1" >Zone 1</mat-option>
+    <mat-option [value]="2">Zone 2</mat-option>
+    <mat-option [value]="3">Zone 3</mat-option>
+    <mat-option [value]="4">Zone 4</mat-option>
+  </mat-select>
+</mat-form-field>
+
+<button mat-raised-button color="primary" (click)="showClick()" >Show</button>
 
 <div class="map-container">
   <div class="map-frame">
     <div id="map"></div>
   </div>
+</div>
+
+<div class="result-container">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Hazards</mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <canvas #earthquake></canvas>
+    <canvas #hail></canvas>
+    <canvas #tornado></canvas>
+    <canvas #heat></canvas>
+
+  </mat-expansion-panel>
 </div>

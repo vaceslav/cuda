@@ -1,11 +1,13 @@
-version: '3'
+version: "3"
 
 services:
   db:
-    image: omnisci/core-os-cuda
+    # image: omnisci/core-os-cuda
+    image: omnisci/omnisci-ee-cuda
     runtime: nvidia
+    restart: always
     ipc: host
-    ports: 
+    ports:
       - 6273-6280:6273-6280
-    volumes: 
+    volumes:
       - ./omnisci-storage:/omnisci-storage

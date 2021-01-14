@@ -35,14 +35,8 @@ geohashDf = pd.DataFrame({  'lat': [2, 3, 4, 4, 4],
                             })
 print(geohashDf)
 
-#res = geohashDf.groupby(['geohash', 'building'])['building']
-res = geohashDf.groupby('geohash')['building'].value_counts()
+res = geohashDf.groupby(['geohash', 'building'])['building'].count()
 print(res)
-print(res.index)
-res.index = res.index.to_flat_index()
-print(res)
-print(res.index)
-
 
 
 res2 = geohashDf.groupby(['geohash'])['lat', 'lon'].mean()
@@ -53,9 +47,7 @@ print(res3)
 
 res3['lat'] = res2['lat']
 res3['lon'] = res2['lon']
+res3['building'] = res['building']
 print(res3)
-
-
-res3.merge(res, left_index=False,  right_on=['geohash', 'building'])
 
 

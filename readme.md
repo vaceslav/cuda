@@ -46,6 +46,7 @@ create new eviropment
 ## login in omnisci db cli
 
     docker-compose exec db bash
+    docker-compose exec db /omnisci/bin/omnisql -p HyperInteractive
     ./insert_sample_data
     /omnisci/bin/omnisql 
 
@@ -66,7 +67,66 @@ create table *portfolios*
             building TEXT ENCODING DICT
             );
 
+    CREATE TABLE IF NOT EXISTS portfolios2 (
+            portfolio TEXT ENCODING DICT,
+            ID BIGINT NOT NULL,
+            CountryCode TEXT ENCODING DICT,
+            Latitude DOUBLE,
+            Longitude DOUBLE,
+            Income_Group INTEGER, 
+            TSI_Group TEXT ENCODING DICT,
+            Sum_Insured DOUBLE,
+            Has_Losses BOOLEAN,
+            Losses DOUBLE,
+            Building_Type TEXT ENCODING DICT, 
+            Sample_Rating TEXT ENCODING DICT,
+            geohash_1 TEXT ENCODING DICT,
+            geohash_2 TEXT ENCODING DICT,
+            geohash_3 TEXT ENCODING DICT,
+            geohash_4 TEXT ENCODING DICT,
+            geohash_5 TEXT ENCODING DICT,
+            geohash_6 TEXT ENCODING DICT,
+            geohash_7 TEXT ENCODING DICT,
+            geohash_8 TEXT ENCODING DICT
+    );
+
+    CREATE TABLE IF NOT EXISTS model2layers (
+            ID BIGINT NOT NULL,
+            LayerName TEXT ENCODING DICT,
+            ParentLayerId FLOAT
+    );
+
+     CREATE TABLE IF NOT EXISTS model2locations (
+            ID BIGINT NOT NULL,
+            LayerId BIGINT NOT NULL,
+            CountryCode TEXT ENCODING DICT,
+            Latitude DOUBLE,
+            Longitude DOUBLE,
+            Income_Group INTEGER, 
+            TSI_Group TEXT ENCODING DICT,
+            Sum_Insured DOUBLE,
+            Has_Losses BOOLEAN,
+            Losses DOUBLE,
+            Building_Type TEXT ENCODING DICT, 
+            Sample_Rating TEXT ENCODING DICT,
+            geohash_1 TEXT ENCODING DICT,
+            geohash_2 TEXT ENCODING DICT,
+            geohash_3 TEXT ENCODING DICT,
+            geohash_4 TEXT ENCODING DICT,
+            geohash_5 TEXT ENCODING DICT,
+            geohash_6 TEXT ENCODING DICT,
+            geohash_7 TEXT ENCODING DICT,
+            geohash_8 TEXT ENCODING DICT
+    );
+
+
+
+
 #password: **HyperInteractive**
+
+size of omnisci storage dir
+
+    du -sh omnisci-storage
 
 
 ## FAQ
