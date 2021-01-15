@@ -1,32 +1,64 @@
-<button (click)="onClusterClick()">Cluster</button>
-<button (click)="getScale()">Scale</button>
-<button (click)="addImageLayer()">Image</button>
-
-<div>Position: Long {{long}} Lat {{lat}}</div>
-
-<h4>Cluster Count: {{clusterCount | number }} Cluster TSI: {{clusterTsi | number }}</h4>
 
 
-<mat-form-field appearance="fill" style="width: 350px;">
-  <mat-label>Portfolio</mat-label>
-  <mat-select [(value)]="selectedPortfolio">
-    <mat-option *ngFor="let portfolio of portfolios$ | async" [value]="portfolio">
-      {{portfolio}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<div class="header">
+  
 
-<mat-form-field appearance="fill" style="width: 350px;">
-  <mat-label>Earthquake</mat-label>
-  <mat-select (valueChange)="earthQuakeChange($event)">
-    <mat-option [value]="1" >Zone 1</mat-option>
-    <mat-option [value]="2">Zone 2</mat-option>
-    <mat-option [value]="3">Zone 3</mat-option>
-    <mat-option [value]="4">Zone 4</mat-option>
-  </mat-select>
-</mat-form-field>
+  <div class="portfolio-selection">
+    <mat-form-field appearance="fill" style="width: 350px;">
+      <mat-label>Portfolio</mat-label>
+      <mat-select [value]="selectedPortfolio" (selectionChange)="portfolioChange($event)">
+        <mat-option *ngFor="let portfolio of portfolios$ | async" [value]="portfolio">
+          {{portfolio}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <!-- <mat-form-field appearance="fill" style="width: 350px;">
+      <mat-label>Earthquake</mat-label>
+      <mat-select (valueChange)="earthQuakeChange($event)">
+        <mat-option [value]="1" >Zone 1</mat-option>
+        <mat-option [value]="2">Zone 2</mat-option>
+        <mat-option [value]="3">Zone 3</mat-option>
+        <mat-option [value]="4">Zone 4</mat-option>
+      </mat-select>
+    </mat-form-field> -->
 
-<button mat-raised-button color="primary" (click)="showClick()" >Show</button>
+    <button mat-raised-button color="primary" (click)="showClick()" >Show</button>
+  </div>
+
+  <mat-card>
+    <div class="analysis-container">
+      
+      <div>Location count:</div>
+      <div>{{locationCount$ | async | number}}</div>
+
+      <div>TSI:</div>
+      <div>{{tsiSum$ | async | number}}</div>
+
+      <div>Losses:</div>
+      <div>{{lossesSum$ | async | number}}</div>
+
+      <div>Cluster request duration:</div>
+      <div>{{clusterDuration$ | async | duration}}</div>
+
+      <div>Analysis request duration:</div>
+      <div>{{analyzeDuration$ | async | duration}}</div>
+    </div>
+  </mat-card>
+
+  <div class="old-actions">
+    <button (click)="addImageLayer()">Image</button>
+  </div>
+
+  
+
+  <div class="output">
+    <div>Position: Long {{long}} Lat {{lat}}</div>
+  </div>
+
+  
+
+</div>
 
 <div class="map-container">
   <div class="map-frame">
@@ -58,7 +90,7 @@
               *ngFor="let c of countires$ | async" 
               (change)="countryClick($event, c)"
               [checked]="c.checked"
-              >{{c.country}} - {{c.count}}
+              >{{c.country}} - {{c.count | number}}
       </mat-checkbox>
     </div>
 

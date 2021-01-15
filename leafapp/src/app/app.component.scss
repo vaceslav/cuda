@@ -49,3 +49,13 @@
     grid-template-columns: auto;
   }
 }
+
+.header {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+.analysis-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}

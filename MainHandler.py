@@ -26,17 +26,20 @@ class MainHandler(tornado.web.RequestHandler):
 
 class MainImageHandler(tornado.web.RequestHandler):
 
-    def set_default_headers(self):
-        self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+    def post(self):
 
-    def get(self):
+        portfolio = self.get_argument('portfolio')
+        zoom = int(self.get_argument('zoom'))
+        extent = self.get_argument('extent')
+        scale = int(self.get_argument('scale'))
+        width = int(self.get_argument('width'))
+        height = int(self.get_argument('height'))
 
-        extent = self.get_argument('bbox')
+        body = tornado.escape.json_decode(self.request.body)
+        filter = body['filter']
 
         t = Omnisci()
-        data = t.requestImage(extent)
+        data = t.requestImage(portfolio, extent, width, height, filter)
 
         self.write(data._render_result.image)
         self.set_header("Content-type",  "image/png")
@@ -69,7 +72,7 @@ class MainAnalyzeHandler(tornado.web.RequestHandler):
 def make_app():
     return tornado.web.Application([
         (r"/api/cluster", MainHandler),
-        (r"/image", MainImageHandler),
+        (r"/api/image", MainImageHandler),
         (r"/api/portfolios", MainPortfolioListHandler),
         (r"/api/analyze", MainAnalyzeHandler),
     ])

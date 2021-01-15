@@ -1,13 +1,13 @@
 {
-    "width": 256,
-    "height": 256,
+    "width": {WIDTH},
+    "height": {HEIGHT},
     "viewRenderOptions": {
         "premultipliedAlpha": false
     },
     "data": [
         {
             "name": "pointmap",
-            "sql": "SELECT conv_4326_900913_x(lon) AS x, conv_4326_900913_y(lat) AS y FROM portfolios WHERE {WHERE} LIMIT 10000000",
+            "sql": "SELECT conv_4326_900913_x(Longitude) AS x, conv_4326_900913_y(Latitude) AS y FROM portfolios WHERE {WHERE} LIMIT 10000000",
             "enableHitTesting": true
         }
     ],

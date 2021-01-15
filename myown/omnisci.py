@@ -12,6 +12,8 @@ import pandas as pd
 import hdbscan
 from pyproj import Proj, transform
 from myown.filter import create_filter_where
+import time
+from datashader.utils import lnglat_to_meters as webm
 
 
 class Omnisci:
@@ -284,8 +286,10 @@ class Omnisci:
         return df.values.tolist()
 
     def clusterGeohash(self, where):
-        geohash_level = self.calcLevel(
-            where, thresholdMin=5000, thresholdMax=7000)
+
+        start = time.time()
+
+        geohash_level = self.calcLevel(where, thresholdMin=5000, thresholdMax=7000)
 
         # buildingQuery = f"SELECT building, KEY_FOR_STRING(building), COUNT(*) from portfolios where {where}  GROUP BY building"
 
@@ -316,8 +320,12 @@ class Omnisci:
         # nunique =  df.groupby(['geohash']).nunique().values.tolist()
 
         items = df.values.tolist()
+
+        end = time.time()
+        duration = end - start
+
         # print(items)
-        return items
+        return items, duration
 
     def request(self, portfolio, zoom, extent, scale, filter):
 
@@ -334,16 +342,18 @@ class Omnisci:
         maxSingePoints = 250
 
         points = []
+        duration = 12346879.0
         if count > maxSingePoints:
-            points = self.createCluster(where, scale)
+            points, duration = self.createCluster(where, scale)
         else:
             points = self.createNoCluster(where)
 
         # collection = self.createCollection(cluster.values.tolist())
         collection = self.createCollection(points)
-        return collection
+        result = dict(items=collection, duration=duration)
+        return result
 
-    def requestImage(self, extent):
+    def requestImage(self, portfolio, extent, width, height, filter):
 
         extent_splt = extent.split(',')
 
@@ -352,7 +362,10 @@ class Omnisci:
         minLong, minLat = extent_splt[0], extent_splt[1]
         maxLong, maxLat = extent_splt[2], extent_splt[3]
 
-        where = self.createWhere(extent, True)
+        minLong, minLat = webm(minLong, minLat)
+        maxLong, maxLat = webm(maxLong, maxLat)
+
+        where = self.createWhere(portfolio, extent, filter)
 
         # inProj = Proj('epsg:3857')
         # outProj = Proj('epsg:4326')
@@ -369,10 +382,11 @@ class Omnisci:
         #is_point_in_merc_view(lon, lat, {extent})
         with open('myown/vega.json', 'r') as file:
             vegaRequest = file.read()
-            vegaRequest = vegaRequest.replace('{WHERE}', where).replace(
-                '{MIN_LONG}', str(minLong)).replace('{MAX_LONG}', str(maxLong))
-            vegaRequest = vegaRequest.replace('{MIN_LAT}', str(
-                minLat)).replace('{MAX_LAT}', str(maxLat))
+            vegaRequest = vegaRequest.replace('{WHERE}', where).replace('{MIN_LONG}', str(minLong)).replace('{MAX_LONG}', str(maxLong))
+            vegaRequest = vegaRequest.replace('{MIN_LAT}', str(minLat)).replace('{MAX_LAT}', str(maxLat))
+
+            vegaRequest = vegaRequest.replace('{WIDTH}', str(width)).replace('{HEIGHT}', str(height))
+
             vegaRequest = vegaRequest.replace('\n', '')
             data = self.con.render_vega(vegaRequest)
             return data
