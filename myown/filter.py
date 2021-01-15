@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def create_filter_where(filter):
     filter_where = ""
     if 'earthquake' in filter:
@@ -18,15 +21,25 @@ def create_filter_where(filter):
 
         if len(countries) > 0:
             country_join = "' , '".join(countries)
-            filter_where = filter_where + \
-                f" AND CountryCode IN ('{country_join}')"
+            filter_where = filter_where + f" AND CountryCode IN ('{country_join}')"
 
     if 'buildings' in filter:
         buildings = filter["buildings"]
 
         if len(buildings) > 0:
             buildings_join = "' , '".join(buildings)
-            filter_where = filter_where + \
-                f" AND Building_Type IN ('{buildings_join}')"
+            filter_where = filter_where + f" AND Building_Type IN ('{buildings_join}')"
+
+    if 'polygons' in filter:
+        polygons = filter["polygons"]
+
+        if len(polygons) > 0:
+            subs = []
+            for polygon in polygons:
+                sub_query = f"  ST_CONTAINS(ST_GeomFromText('{polygon}'), ST_Point(Longitude, Latitude)) "
+                subs.append(sub_query)
+
+            join = " OR ".join(subs)
+            filter_where = f"{filter_where} AND ({join})"
 
     return filter_where

@@ -118,6 +118,28 @@ export class AppComponent implements AfterViewInit, OnInit {
       this.long = lng;
       this.lat = lat;
     });
+
+    var drawnItems = new L.FeatureGroup();
+    this.map.addLayer(drawnItems);
+    var drawControl = new L.Control.Draw({
+      draw: {
+        marker: undefined,
+        circle: undefined,
+        circlemarker: undefined,
+        polyline: undefined,
+      },
+      edit: {
+        featureGroup: drawnItems,
+      },
+    });
+    this.map.addControl(drawControl);
+
+    this.map.on(L.Draw.Event.CREATED, (e) => {
+      const layer = e.layer;
+
+      drawnItems.addLayer(layer);
+      this.portfolioService.setFilterPolygon(layer);
+    });
   }
 
   showClick() {

@@ -11,6 +11,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DurationPipe } from './duration.pipe';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 
 @NgModule({
   declarations: [AppComponent, DurationPipe],
@@ -24,6 +26,8 @@ import { DurationPipe } from './duration.pipe';
     MatCheckboxModule,
     MatCardModule,
     MatGridListModule,
+    LeafletModule,
+    LeafletDrawModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

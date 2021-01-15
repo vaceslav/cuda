@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { LEADING_TRIVIA_CHARS } from '@angular/compiler/src/render3/view/template';
 import { Injectable } from '@angular/core';
-import * as L from 'leaflet';
+import { DivIcon, geoJSON, imageOverlay, Marker, marker, Point, Polygon, Polyline } from 'leaflet';
 import { ReplaySubject, Subscription } from 'rxjs';
-import { map, subscribeOn } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import * as WKT from 'terraformer-wkt-parser';
 import { ClusterResult } from './typings';
 
 @Injectable({ providedIn: 'root' })
@@ -60,6 +60,7 @@ export class PortfolioService {
   private _filter = {
     countries: [],
     buildings: [],
+    polygons: [],
   };
 
   private _portfolioRequests: Subscription[] = [];
@@ -150,14 +151,15 @@ export class PortfolioService {
 
       this.clusterDurationSubject.next(data.duration);
 
-      const geoJsonLayer = L.geoJSON(data.items, {
+      const geoJsonLayer = geoJSON(data.items as any, {
         pointToLayer: (geoJsonPoint, latlng) => {
-          geoJsonPoint.properties = geoJsonPoint.geometry.properties;
-          delete geoJsonPoint.geometry.properties;
-          const marker = L.marker(latlng);
-          marker.count = geoJsonPoint.properties.count;
-          marker.tsi = geoJsonPoint.properties.tsi;
-          return marker;
+          const props = geoJsonPoint.geometry['properties'];
+          delete geoJsonPoint.geometry['properties'];
+
+          const myMarker = marker(latlng);
+          myMarker['count'] = props.count;
+          myMarker['tsi'] = props.tsi;
+          return myMarker;
         },
       });
       this, this._clusterLayer.addLayer(geoJsonLayer);
@@ -173,6 +175,7 @@ export class PortfolioService {
   }
 
   private createClusterLayer() {
+    const L: any = window.L as any;
     const clusterLayer = L.markerClusterGroup({
       zoomToBoundsOnClick: false,
       iconCreateFunction: (cluster) => {
@@ -191,10 +194,10 @@ export class PortfolioService {
           c += 'large';
         }
 
-        return new L.DivIcon({
+        return new DivIcon({
           html: '<div><span>' + childCount + '</span></div>',
           className: 'marker-cluster' + c,
-          iconSize: new L.Point(40, 40),
+          iconSize: new Point(40, 40),
         });
 
         // return L.divIcon({ html: '<b>' + myCustomCount + '</b>' });
@@ -272,7 +275,7 @@ export class PortfolioService {
       var urlCreator = window.URL || window.webkitURL;
       var imageUrl = urlCreator.createObjectURL(blob);
       if (!this._imageLayer) {
-        this._imageLayer = L.imageOverlay(imageUrl, this.map.getBounds());
+        this._imageLayer = imageOverlay(imageUrl, this.map.getBounds());
         this._imageLayer.addTo(this.map);
       } else {
         this._imageLayer.setUrl(imageUrl);
@@ -288,5 +291,12 @@ export class PortfolioService {
     this._portfolio = portfolio;
     this.drawLayers();
     this.requestAnalyze();
+  }
+
+  setFilterPolygon(layer: any) {
+    var geojson = layer.toGeoJSON();
+    var wkt = WKT.convert(geojson.geometry);
+    this._filter.polygons.push(wkt);
+    this.drawLayers();
   }
 }
