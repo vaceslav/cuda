@@ -5,6 +5,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,6 +29,7 @@ import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
     MatGridListModule,
     LeafletModule,
     LeafletDrawModule,
+    MatSlideToggleModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

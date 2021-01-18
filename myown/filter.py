@@ -37,6 +37,7 @@ def create_filter_where(filter):
             subs = []
             for polygon in polygons:
                 sub_query = f"  ST_CONTAINS(ST_GeomFromText('{polygon}'), ST_Point(Longitude, Latitude)) "
+                # sub_query = f"  ST_CONTAINS(ST_GeomFromText('{polygon}', 4326), coor) "
                 subs.append(sub_query)
 
             join = " OR ".join(subs)

@@ -7,6 +7,7 @@ import pygeohash as pgh
 import numpy as np
 
 import pandas as pd
+import geopandas
 import glob
 import swifter
 import time
@@ -14,6 +15,7 @@ from sklearn.datasets import make_regression
 from sklearn.datasets import make_blobs
 from sklearn.datasets import make_low_rank_matrix
 import random
+from shapely.geometry import Point
 
 
 def generateGeohashesNew(row):
@@ -118,7 +120,7 @@ def gen_array(size, parts):
     return result
 
 
-for filename in glob.glob('data/portfolios/*.csv'):
+for filename in glob.glob('data/portfolios/*100k*.csv'):
     print(f'read file {filename}')
     df = read_csv(filename)
 
@@ -131,6 +133,20 @@ for filename in glob.glob('data/portfolios/*.csv'):
 
     df.insert(0, 'PortfolioName', portfolioName)
     df.insert(1, 'LayerId', np.random.randint(1, 21, size=len(df.index)))
+
+    # r = Point(150, 60)
+    # print(r)
+
+    # coors: pd.Series = df.swifter.apply(lambda row: Point(row['Longitude'], row['Latitude']), axis=1)
+    # test = coors.to_list()
+
+    # s = geopandas.GeoSeries(test)
+    # print(s)
+
+    # #import shapely
+    # print(coors.head())
+
+    # df.insert(6, 'coor', s)
 
     print('calculate geohash')
 
@@ -148,6 +164,7 @@ for filename in glob.glob('data/portfolios/*.csv'):
 
     print(f"Duration: {time.time() - start}")
     print(df.dtypes)
+    print(df.head())
 
     # df['geohash_8'] = df.swifter.apply(lambda row: pgh.encode(row['Latitude'], row['Longitude'], precision=8), axis=1)
 

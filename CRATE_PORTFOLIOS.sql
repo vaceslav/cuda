@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS portfolios (
             CountryCode TEXT ENCODING DICT,
             Latitude DOUBLE,
             Longitude DOUBLE,
+            coor GEOMETRY(POINT, 4326),
             Income_Group INTEGER, 
             TSI_Group TEXT ENCODING DICT,
             Sum_Insured DOUBLE,

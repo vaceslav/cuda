@@ -3,6 +3,8 @@ import tornado.ioloop
 import tornado.web
 
 from myown.omnisci import Omnisci
+from myown.postgres import Postg
+
 from myown.portfolios import Portfolios
 
 
@@ -18,7 +20,8 @@ class MainHandler(tornado.web.RequestHandler):
         body = tornado.escape.json_decode(self.request.body)
         filter = body['filter']
 
-        t = Omnisci()
+        #t = Omnisci()
+        t = Postg()
         data = t.request(portfolio, zoom, extent, scale, filter)
 
         self.write(data)
@@ -49,7 +52,7 @@ class MainPortfolioListHandler(tornado.web.RequestHandler):
 
     def get(self):
 
-        p = Portfolios()
+        p = Portfolios(False)
         data = p.list()
 
         self.finish({'portfolios': data})
@@ -63,7 +66,7 @@ class MainAnalyzeHandler(tornado.web.RequestHandler):
         body = tornado.escape.json_decode(self.request.body)
         filter = body['filter']
 
-        p = Portfolios()
+        p = Portfolios(True)
         data = p.analyze(portfolio, filter)
 
         self.finish({'analyze': data})

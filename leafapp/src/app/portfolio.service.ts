@@ -298,5 +298,6 @@ export class PortfolioService {
     var wkt = WKT.convert(geojson.geometry);
     this._filter.polygons.push(wkt);
     this.drawLayers();
+    this.requestAnalyze();
   }
 }
