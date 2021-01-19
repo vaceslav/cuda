@@ -1,4 +1,5 @@
 from logging import debug
+from myown.hierarchical import Hierarchical
 import tornado.ioloop
 import tornado.web
 
@@ -20,8 +21,8 @@ class MainHandler(tornado.web.RequestHandler):
         body = tornado.escape.json_decode(self.request.body)
         filter = body['filter']
 
-        #t = Omnisci()
-        t = Postg()
+        t = Omnisci()
+        #t = Postg()
         data = t.request(portfolio, zoom, extent, scale, filter)
 
         self.write(data)
@@ -66,10 +67,24 @@ class MainAnalyzeHandler(tornado.web.RequestHandler):
         body = tornado.escape.json_decode(self.request.body)
         filter = body['filter']
 
-        p = Portfolios(True)
+        p = Portfolios(False)
         data = p.analyze(portfolio, filter)
 
         self.finish({'analyze': data})
+
+
+class MainHierarchicalHandler(tornado.web.RequestHandler):
+
+    def post(self):
+
+        portfolio = self.get_argument('portfolio')
+        body = tornado.escape.json_decode(self.request.body)
+        filter = body['filter']
+
+        p = Hierarchical()
+        data = p.request(portfolio, filter)
+
+        self.finish({'hierarchical': data})
 
 
 def make_app():
@@ -78,6 +93,7 @@ def make_app():
         (r"/api/image", MainImageHandler),
         (r"/api/portfolios", MainPortfolioListHandler),
         (r"/api/analyze", MainAnalyzeHandler),
+        (r"/api/hierarchical", MainHierarchicalHandler),
     ])
 
 

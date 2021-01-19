@@ -7,6 +7,9 @@ import { PortfolioService } from './portfolio.service';
 import { map } from 'rxjs/operators';
 import { Chart } from 'chart.js';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { TREE_DATA } from './chart.options';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { NestedTreeControl } from '@angular/cdk/tree';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +23,8 @@ export class AppComponent implements AfterViewInit, OnInit {
   @ViewChild('hail') myHailChartRef: ElementRef;
   @ViewChild('tornado') myTornadoChartRef: ElementRef;
   @ViewChild('heat') myHeatChartRef: ElementRef;
+
+  @ViewChild('hCanvas') diagrammChartRef: ElementRef;
 
   selectedPortfolio: string = 'FAB_SampleLocations_100k_0';
 
@@ -39,6 +44,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   locationCount$: Observable<number>;
   tsiSum$: Observable<number>;
   lossesSum$: Observable<number>;
+  modelDuration: any;
 
   constructor(private http: HttpClient, private portfolioService: PortfolioService) {}
 
@@ -214,5 +220,19 @@ export class AppComponent implements AfterViewInit, OnInit {
   portfolioChange($event) {
     this.selectedPortfolio = $event.value;
     this.portfolioService.setPortfolio($event.value);
+  }
+
+  treeControl = new NestedTreeControl<any>((node) => node.children);
+  dataSource = new MatTreeNestedDataSource<any>();
+  hasChild = (_: number, node: any) => !!node.children && node.children.length > 0;
+
+  addDiagramm() {
+    this.portfolioService.getHierarchicalData().subscribe((data) => {
+      const items = JSON.parse(data.hierarchical);
+      const duration = items['duration'];
+      this.modelDuration = duration;
+      this.dataSource.data = [items];
+    });
+    // this.dataSource.data = TREE_DATA;
   }
 }

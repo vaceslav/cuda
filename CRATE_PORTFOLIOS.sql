@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS portfolios (
             PortfolioName TEXT ENCODING DICT,
             LayerId BIGINT NOT NULL,
+            parent_layer_id BIGINT,
             ID BIGINT NOT NULL,
             CountryCode TEXT ENCODING DICT,
             Latitude DOUBLE,
             Longitude DOUBLE,
-            coor GEOMETRY(POINT, 4326),
             Income_Group INTEGER, 
             TSI_Group TEXT ENCODING DICT,
             Sum_Insured DOUBLE,

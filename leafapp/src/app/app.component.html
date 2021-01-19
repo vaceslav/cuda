@@ -48,6 +48,7 @@
 
   <div class="old-actions">
     <button (click)="addImageLayer()">Image</button>
+    <button (click)="addDiagramm()">Diagramm</button>
   </div>
 
   
@@ -110,4 +111,49 @@
     </div>
     
   </mat-expansion-panel>
+</div>
+
+<div class="graph-container">
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Model {{modelDuration | duration}}</mat-panel-title>
+    </mat-expansion-panel-header>
+
+  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+    <!-- This is the tree node template for leaf nodes -->
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+    
+    <div class="mat-tree-node">
+      <div style="border-bottom: 1px solid white; margin-bottom: 10px;">
+        <div style="font-weight: 600;display: block;">{{node.name}}</div>
+        <div>Layer data: TSI: {{node.TSI_Local | number}} Losses {{node.Losses_Local | number}} Count {{node.Count_Local | number}}</div>
+        <div>Inclusive children: {{node.TSI | number}} Losses {{node.Losses | number}} Count {{node.Count | number}}</div>
+      </div>
+      
+    </div>
+  </mat-tree-node>
+  <!-- This is the tree node template for expandable nodes -->
+  <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild"> 
+    <div>
+      <div class="mat-tree-node">
+        <button mat-icon-button matTreeNodeToggle
+                [attr.aria-label]="'Toggle ' + node.name">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        <div style="border-bottom: 1px solid white; margin-bottom: 10px;">
+          <div style="font-weight: 600;display: block;">{{node.name}}</div>
+          <div>Layer data: TSI: {{node.TSI_Local | number}} Losses {{node.Losses_Local | number}} Count {{node.Count_Local | number}}</div>
+          <div>Inclusive children: {{node.TSI | number}} Losses {{node.Losses | number}} Count {{node.Count | number}}</div>
+        </div>
+      </div>
+      <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+        <ng-container matTreeNodeOutlet></ng-container>
+      </ul>
+    </div>
+  </mat-nested-tree-node>
+  </mat-tree>
+</mat-expansion-panel>
 </div>

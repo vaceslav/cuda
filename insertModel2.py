@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 
-import zipfile  
+import zipfile
 from pymapd import connect
 import pygeohash as pgh
 import numpy as np
@@ -12,6 +12,7 @@ import swifter
 
 
 con = connect(user="admin", password="HyperInteractive", host="localhost", dbname="omnisci")
+
 
 def generateGeohashes(df):
     g1s, g2s, g3s, g4s, g5s, g6s, g7s, g8s = [], [], [], [], [], [], [], []
@@ -40,45 +41,44 @@ def generateGeohashes(df):
                               'geohash_8': g8s,
                               })
 
-    
-
     return df_result
 
+
 def read_csv(file):
-    df = pd.read_csv(file, sep=';', 
-                    encoding = "utf-8", 
-                    usecols=['ID', 
-                            'CountryCode', 
-                            "Latitude", 
-                            "Longitude",
-                            "Income Group", "TSI Group", "Sum Insured", "Has Losses", "Losses", "Building Type", "Sample Rating"],
-                    dtype={
-                        'ID': np.int, 
-                        'Latitude': np.float, 
-                        'Longitude': np.float,
-                        'Income Group': np.int32,
-                        'Sum Insured': np.float,
-                        'Has Losses': np.bool,
-                        'Losses': np.float,
-                        'CountryCode': np.str
-                        }
-                    )
+    df = pd.read_csv(file, sep=';',
+                     encoding="utf-8",
+                     usecols=['ID',
+                              'CountryCode',
+                              "Latitude",
+                              "Longitude",
+                              "Income Group", "TSI Group", "Sum Insured", "Has Losses", "Losses", "Building Type", "Sample Rating"],
+                     dtype={
+                         'ID': np.int,
+                         'Latitude': np.float,
+                         'Longitude': np.float,
+                         'Income Group': np.int32,
+                         'Sum Insured': np.float,
+                         'Has Losses': np.bool,
+                         'Losses': np.float,
+                         'CountryCode': np.str
+                     }
+                     )
 
     df.rename(columns={
-                'Income Group': 'Income_Group',
-                'TSI Group': 'TSI_Group',
-                'Sum Insured': 'Sum_Insured',
-                'Has Losses': 'Has_Losses',
-                'Building Type': 'Building_Type',
-                'Sample Rating': 'Sample_Rating'
-                }, inplace=True)
+        'Income Group': 'Income_Group',
+        'TSI Group': 'TSI_Group',
+        'Sum Insured': 'Sum_Insured',
+        'Has Losses': 'Has_Losses',
+        'Building Type': 'Building_Type',
+        'Sample Rating': 'Sample_Rating'
+    }, inplace=True)
 
     return df
 
 
 def create_layers():
     layers = pd.DataFrame({
-        "Id": list(range(1, 20+1)),                                   
+        "Id": list(range(1, 20+1)),
         "ParentLayerId": [np.NaN, 1, 1, 2, 2, 2, 3, 3, 4, 5, 5, 6, 6, 6, 6, 7, 7, 8, 8, 8]
     })
 
@@ -93,6 +93,8 @@ def create_layers():
     print(layers)
     print(layers.dtypes)
 
+
+create_layers()
 
 filename = "data/portfolios/FAB_SampleLocations_100k.csv_done"
 print(f'read file {filename}')
@@ -114,7 +116,7 @@ df['geohash_4'] = df.swifter.apply(lambda row: row['geohash_8'][0:4], axis=1)
 df['geohash_5'] = df.swifter.apply(lambda row: row['geohash_8'][0:5], axis=1)
 df['geohash_6'] = df.swifter.apply(lambda row: row['geohash_8'][0:6], axis=1)
 df['geohash_7'] = df.swifter.apply(lambda row: row['geohash_8'][0:7], axis=1)
-#print(df.head())
+# print(df.head())
 #geohashcols = generateGeohashes(df)
 #print('join geohashes')
 #df = df.join(geohashcols)
@@ -124,7 +126,3 @@ df.to_feather("data/portfolios/FAB_SampleLocations_100k_geohashes.feather")
 
 print('save data to db')
 #con.load_table("model2locations", df)
-
-
-
-

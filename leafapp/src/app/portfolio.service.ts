@@ -300,4 +300,10 @@ export class PortfolioService {
     this.drawLayers();
     this.requestAnalyze();
   }
+
+  getHierarchicalData() {
+    const params = new HttpParams().append('portfolio', this._portfolio);
+
+    return this.http.post<any>('api/hierarchical', { filter: this._filter }, { params });
+  }
 }

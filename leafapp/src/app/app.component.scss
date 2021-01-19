@@ -59,3 +59,22 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
 }
+
+.graph-container {
+  position: absolute;
+  width: 500px;
+  z-index: 100000;
+  right: 1120px;
+  top: 185px;
+}
+
+.example-tree-invisible {
+  display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
