@@ -10,4 +10,4 @@ services:
     ports:
       - 6273-6280:6273-6280
     volumes:
-      - ./omnisci-storage:/omnisci-storage
+      - ./omnisci-storage_10x:/omnisci-storage

@@ -18,7 +18,7 @@ con = connect(user="admin", password="HyperInteractive",
               host="localhost", dbname="omnisci")
 
 
-for filename in glob.glob('data/portfolios/*5m*.feather'):
+for filename in glob.glob('data/portfolios/*.feather'):
     print(f'read file {filename}')
     df: pd.DataFrame = pd.read_feather(filename)
 
@@ -31,7 +31,7 @@ for filename in glob.glob('data/portfolios/*5m*.feather'):
 
     print(df.dtypes)
 
-    for i in range(1):
+    for i in range(10):
         print(f"loop: {i}")
 
         portfolioNmae = f"{filename.split('/')[-1].split('.')[0]}_{i}"

@@ -120,7 +120,7 @@ def gen_array(size, parts):
     return result
 
 
-for filename in glob.glob('data/portfolios/*5m*.csv'):
+for filename in glob.glob('data/portfolios/*100k*.csv'):
     print(f'read file {filename}')
     df = read_csv(filename)
 
@@ -133,9 +133,9 @@ for filename in glob.glob('data/portfolios/*5m*.csv'):
 
     df.insert(0, 'PortfolioName', portfolioName)
     df.insert(1, 'LayerId', np.random.randint(1, 21, size=len(df.index)))
-    df.insert(2, 'parent_layer_id', np.random.randint(1, 21, size=len(df.index)))
+    # df.insert(2, 'parent_layer_id', np.random.randint(1, 21, size=len(df.index)))
 
-    df.loc[df['LayerId'] == 1, 'parent_layer_id'] = -1
+    # df.loc[df['LayerId'] == 1, 'parent_layer_id'] = -1
 
     # r = Point(150, 60)
     # print(r)
