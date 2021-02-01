@@ -60,12 +60,18 @@
   grid-template-columns: 1fr 2fr;
 }
 
-.graph-container {
+.graph-container,
+.advanced-analytics {
   position: absolute;
   width: 500px;
   z-index: 1000;
   right: 1120px;
   top: 185px;
+}
+
+.advanced-analytics {
+  top: 240px;
+  z-index: 999;
 }
 
 .example-tree-invisible {

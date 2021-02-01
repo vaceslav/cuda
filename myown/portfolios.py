@@ -97,6 +97,8 @@ class Portfolios:
 
         query = f"""select  
                         {group_name},
+                        SUM(Sum_Insured) AS tsi,
+                        SUM(Losses) AS losses,
                         count(*) AS pcount
                     FROM portfolios 
                     WHERE portfolioname = '{portfolio_name}' 
@@ -107,8 +109,11 @@ class Portfolios:
         df_group = pd.read_sql(query, self.con)
         # print(df_group.head())
 
+        dd = df_group.to_dict('records')
+
         # df_group.set_index(group_name)
-        d = dict(zip(df_group[group_name], df_group['pcount']))
+        #d = dict(zip(df_group[group_name], df_group['pcount']))
+        d = dict(zip(df_group[group_name], dd))
 
         # print(d)
 

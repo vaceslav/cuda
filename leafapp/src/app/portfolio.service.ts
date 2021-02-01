@@ -28,12 +28,12 @@ export class PortfolioService {
       for (const item in countries) {
         result.push({
           country: item,
-          count: countries[item],
+          data: countries[item],
           checked: this._filter.countries.indexOf(item) !== -1,
         });
       }
 
-      result.sort((a, b) => b.count - a.count);
+      result.sort((a, b) => b.data.pcount - a.data.pcount);
 
       return result;
     })
@@ -46,14 +46,20 @@ export class PortfolioService {
       for (const item in building) {
         result.push({
           name: item,
-          count: building[item],
+          data: building[item],
           checked: this._filter.buildings.indexOf(item) !== -1,
         });
       }
 
-      result.sort((a, b) => b.count - a.count);
+      result.sort((a, b) => b.data.pcount - a.data.pcount);
 
       return result;
+    })
+  );
+
+  advancedata$ = this.analyses$.pipe(
+    map((data) => {
+      return [data.earthquake, data.hail, data.heat_wave, data.tornado];
     })
   );
 

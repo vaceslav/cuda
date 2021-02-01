@@ -1,0 +1,23 @@
+:host {
+  display: block;
+  margin-top: 20px;
+}
+
+.item-container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 5px;
+}
+
+.chart-item {
+  height: 20px;
+  font-size: small;
+}
+
+.label {
+  width: 50px;
+}
+
+.title {
+  text-transform: uppercase;
+}

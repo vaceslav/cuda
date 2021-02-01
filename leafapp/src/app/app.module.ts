@@ -8,6 +8,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,9 +19,10 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletDrawModule } from '@asymmetrik/ngx-leaflet-draw';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { AdvanceItemComponent } from './advance-item/advance-item.component';
 
 @NgModule({
-  declarations: [AppComponent, DurationPipe],
+  declarations: [AppComponent, DurationPipe, AdvanceItemComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -36,6 +38,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
     MatSlideToggleModule,
     MatTreeModule,
     MatIconModule,
+    MatTooltipModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

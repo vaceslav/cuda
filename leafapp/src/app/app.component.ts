@@ -46,6 +46,8 @@ export class AppComponent implements AfterViewInit, OnInit {
   lossesSum$: Observable<number>;
   modelDuration: any;
 
+  advancedata$: Observable<any>;
+
   constructor(private http: HttpClient, private portfolioService: PortfolioService) {}
 
   ngOnInit(): void {
@@ -59,26 +61,32 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     this.clusterDuration$ = this.portfolioService.clusterDuration$;
 
+    this.advancedata$ = this.portfolioService.advancedata$;
+
     this.portfolioService.analyses$.pipe(map((data) => data.earthquake)).subscribe((earthquake) => {
-      const data = [earthquake['1'], earthquake['2'], earthquake['3'], earthquake['4']];
+      const data = this.getCounts(earthquake, 4);
+      // const data = [earthquake['1']['pcount'], earthquake['2']['pcount'], earthquake['3']['pcount'], earthquake['4']['pcount']];
       this.earthquakeChart.data.datasets[0].data = data;
       this.earthquakeChart.update();
     });
 
     this.portfolioService.analyses$.pipe(map((data) => data.hail)).subscribe((hail) => {
-      const data = [hail['1'], hail['2'], hail['3'], hail['4'], hail['5'], hail['6']];
+      const data = this.getCounts(hail, 6);
+      // const data = [hail['1']['pcount'], hail['2']['pcount'], hail['3']['pcount'], hail['4']['pcount'], hail['5']['pcount'], hail['6']['pcount']];
       this.hailChart.data.datasets[0].data = data;
       this.hailChart.update();
     });
 
     this.portfolioService.analyses$.pipe(map((data) => data.tornado)).subscribe((tornado) => {
-      const data = [tornado['1'], tornado['2'], tornado['3'], tornado['4'], tornado['5']];
+      const data = this.getCounts(tornado, 5);
+      // const data = [tornado['1']['pcount'], tornado['2']['pcount'], tornado['3']['pcount'], tornado['4']['pcount'], tornado['5']['pcount']];
       this.tornadoChart.data.datasets[0].data = data;
       this.tornadoChart.update();
     });
 
     this.portfolioService.analyses$.pipe(map((data) => data.heat_wave)).subscribe((heat) => {
-      const data = [heat['1'], heat['2'], heat['3']];
+      const data = this.getCounts(heat, 3);
+      // const data = [heat['1']['pcount'], heat['2']['pcount'], heat['3']['pcount']];
       this.heatChart.data.datasets[0].data = data;
       this.heatChart.update();
     });
@@ -90,6 +98,19 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.tsiSum$ = this.portfolioService.analyses$.pipe(map((data) => data.tsiSum));
 
     this.lossesSum$ = this.portfolioService.analyses$.pipe(map((data) => data.lossesSum));
+  }
+
+  private getCounts(data, count) {
+    const result = [];
+    for (let i = 1; i <= count; i++) {
+      if (data[i]) {
+        result.push(data[i]['pcount']);
+      } else {
+        result.push(0);
+      }
+    }
+
+    return result;
   }
 
   ngAfterViewInit(): void {

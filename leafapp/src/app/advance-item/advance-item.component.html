@@ -1,0 +1,19 @@
+<div class="title">{{title}}</div>
+
+<div class="item-container">
+    <div class="label">Count</div>
+    <div *ngFor="let item of counts" class="chart-item" [style.width.px]="item.percent * 4"
+        [style.background-color]="item.color" [matTooltip]="item.value | number">
+    </div>
+</div>
+<div class="item-container">
+    <div class="label">TSI</div>
+    <div *ngFor="let item of tsis" class="chart-item" [style.width.px]="item.percent * 4" [style.background-color]="item.color" [matTooltip]="item.value | number">
+    </div>
+</div>
+
+<div class="item-container">
+    <div class="label">Losses</div>
+    <div *ngFor="let item of lossess" class="chart-item" [style.width.px]="item.percent * 4" [style.background-color]="item.color" [matTooltip]="item.value | number">
+    </div>
+</div>

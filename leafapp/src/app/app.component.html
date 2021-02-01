@@ -91,7 +91,7 @@
               *ngFor="let c of countires$ | async" 
               (change)="countryClick($event, c)"
               [checked]="c.checked"
-              >{{c.country}} - {{c.count | number}}
+              >{{c.country}} - {{c.data.pcount | number}}
       </mat-checkbox>
     </div>
 
@@ -107,7 +107,7 @@
     <div class="building-sub-container">
       <mat-checkbox *ngFor="let c of buildings$ | async"
               (change)="buildingClick($event, c)"
-              [checked]="c.checked">{{c.name}} - {{c.count}}</mat-checkbox>
+              [checked]="c.checked">{{c.name}} - {{c.data.pcount}}</mat-checkbox>
     </div>
     
   </mat-expansion-panel>
@@ -156,4 +156,20 @@
   </mat-nested-tree-node>
   </mat-tree>
 </mat-expansion-panel>
+</div>
+
+<div class="advanced-analytics">
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Advanced analytics</mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div *ngIf="advancedata$ | async">
+      <app-advance-item *ngFor="let item of advancedata$ | async" [item]=item></app-advance-item>
+    </div>
+
+  </mat-expansion-panel>
+
+  
+
 </div>
